@@ -3,8 +3,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 
-//import 'package:test_mapbox/services/location_service.dart';
-
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
   @override
@@ -78,22 +76,48 @@ class _MapPageState extends State<MapPage> {
           MarkerLayer(
             markers: [
               Marker(
-                width: 80.0,
-                height: 80.0,
-                point: currentLocation ?? LatLng(20.0, 38.0),
-                child: Icon(
-                  Icons.location_on,
-                  size: 50,
-                  color: Colors.red,
+                width: 48.0,
+                height: 48.0,
+                point: currentLocation ?? const LatLng(20.0, 38.0),
+                child: Container(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: 24.0,
+                        height: 24.0,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.white),
+                      ),
+                      Container(
+                        width: 18.0,
+                        height: 18.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: getCurrentLocation,
-        child: const Icon(Icons.my_location),
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(bottom: 70.0, right: 9.0),
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.blue,
+        ),
+        child: IconButton(
+          icon: const Icon(Icons.my_location_outlined),
+          color: Colors.white,
+          onPressed: () {
+            getCurrentLocation();
+          },
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );

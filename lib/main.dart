@@ -54,7 +54,7 @@ class _HomeNavPageState extends State<HomeNavPage> {
         useActiveColorByDefault: false,
         color: const Color(0xFF262626), // the color of the bar
         items: const [
-          RollingBottomBarItem(Icons.home,
+          RollingBottomBarItem(Icons.map,
               label: 'home', activeColor: Colors.white),
           RollingBottomBarItem(Icons.add,
               label: 'add', activeColor: Colors.white),
