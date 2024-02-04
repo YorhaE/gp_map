@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 //!!!!!!!!!!
-// do not modify or chnge anything of this file, I'm not done with it yet.
+// do not modify or change anything of this file, I'm not done with it yet.
 // -Ether
 //!!!!!!!!!!
 class TileManager {

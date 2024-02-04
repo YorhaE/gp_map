@@ -3,7 +3,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:test_location/tileManager/store_tiles.dart';
 
 //!!!!!!!!!!
-// do not modify or chnge anything of this file, I'm not done with it yet. -Ether
+// do not modify or change anything of this file, I'm not done with it yet.
+// -Ether
 //!!!!!!!!!!
 class LocalTileProvider extends TileProvider {
   TileManager _tileManager;
