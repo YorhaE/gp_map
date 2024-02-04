@@ -1,3 +1,5 @@
+//import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -53,23 +55,20 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Mapbox Flutter App'),
-      // ),
       body: FlutterMap(
         mapController: mapController,
         options: MapOptions(
           initialCenter: currentLocation ??
               LatLng(20.0, 38.0), // Initial center of the map
           initialZoom: 9.0, // Initial zoom level
-        ),
+        ), // MapOptions
         children: [
           TileLayer(
             urlTemplate:
-                'https://api.mapbox.com/styles/v1/yorhaether/clrnqwwd9006g01peerp97p8m/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoieW9yaGFldGhlciIsImEiOiJjbHJmbDVrdGIwNHpuMmtydmhpZDNnNHRoIn0.yrhnYgnLmdl_IgfrlI3mxQ',
+                'https://api.mapbox.com/styles/v1/yorhaether/clrnqwwd9006g01peerp97p8m/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoieW9yaGFldGhlciIsImEiOiJjbHJ4ZjI4ajQwdXZ6Mmp0a3pzZmlxaTloIn0.yiGEwb2lvrqZRFB1QixSYw',
             additionalOptions: const {
               'accessToken':
-                  'pk.eyJ1IjoieW9yaGFldGhlciIsImEiOiJjbHJmbDVrdGIwNHpuMmtydmhpZDNnNHRoIn0.yrhnYgnLmdl_IgfrlI3mxQ',
+                  'pk.eyJ1IjoieW9yaGFldGhlciIsImEiOiJjbHJ4ZjI4ajQwdXZ6Mmp0a3pzZmlxaTloIn0.yiGEwb2lvrqZRFB1QixSYw',
               'id': 'yorhaether.6vwpkduq',
             },
           ),
@@ -109,7 +108,7 @@ class _MapPageState extends State<MapPage> {
         margin: const EdgeInsets.only(bottom: 70.0, right: 9.0),
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.blue,
+          color: Color(0xFF262626),
         ),
         child: IconButton(
           icon: const Icon(Icons.my_location_outlined),

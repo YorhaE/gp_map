@@ -9,10 +9,11 @@ class addPointPage extends StatelessWidget {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(color: Colors.blue),
+        decoration: const BoxDecoration(color: Colors.black),
         child: const Icon(
-          Icons.camera,
+          Icons.add,
           size: 70,
+          color: Colors.white,
         ),
       ),
     );

@@ -9,9 +9,10 @@ class ProfilePage extends StatelessWidget {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(color: Colors.green),
+        decoration: const BoxDecoration(color: Colors.black),
         child: const Icon(
           Icons.person,
+          color: Colors.white,
           size: 70,
         ),
       ),
