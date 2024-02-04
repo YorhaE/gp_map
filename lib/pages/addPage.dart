@@ -18,4 +18,4 @@ class addPointPage extends StatelessWidget {
       ),
     );
   }
-}
+} // addPoint class end
