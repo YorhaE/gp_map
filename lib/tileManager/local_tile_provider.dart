@@ -7,10 +7,11 @@ import 'package:test_location/tileManager/store_tiles.dart';
 // -Ether
 //!!!!!!!!!!
 class LocalTileProvider extends TileProvider {
-  TileManager _tileManager;
+  final TileManager _tileManager;
   final _cache = <String, ImageProvider>{};
+  final String urlTemplate;
 
-  LocalTileProvider(this._tileManager);
+  LocalTileProvider(this._tileManager, this.urlTemplate);
 
   ImageProvider getImage(TileCoordinates coordinates, TileLayer options) {
     // this is a key for cach map
@@ -23,11 +24,9 @@ class LocalTileProvider extends TileProvider {
       // return a network image while the tile is loading:
       return NetworkImage(
         options.urlTemplate!
-            .replaceAll("{x}", coordinates.x.toString())
-            .replaceAll("{y}", coordinates.y.toString())
             .replaceAll("{z}", coordinates.z.toString())
-            .replaceAll("{accessToken}",
-                "pk.eyJ1IjoieW9yaGFldGhlciIsImEiOiJjbHJ4ZjI4ajQwdXZ6Mmp0a3pzZmlxaTloIn0.yiGEwb2lvrqZRFB1QixSYw"),
+            .replaceAll("{x}", coordinates.x.toString())
+            .replaceAll("{y}", coordinates.y.toString()),
       );
     }
   }

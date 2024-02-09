@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:test_location/tileManager/store_tiles.dart';
+import 'package:test_location/tileManager/local_tile_provider.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -11,12 +13,18 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   late MapController mapController;
+  late TileManager tileManager;
+  late LocalTileProvider localTileProvider;
   LatLng? currentLocation;
 
   @override
   void initState() {
     super.initState();
     mapController = MapController();
+    tileManager = TileManager();
+    // initilizing local tile provider
+    localTileProvider = LocalTileProvider(tileManager,
+        "https://api.mapbox.com/styles/v1/yorhaether/clrnqwwd9006g01peerp97p8m/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoieW9yaGFldGhlciIsImEiOiJjbHJ4ZjI4ajQwdXZ6Mmp0a3pzZmlxaTloIn0.yiGEwb2lvrqZRFB1QixSYw");
     getCurrentLocation().then((_) {
       setState(() {});
     });
@@ -44,6 +52,9 @@ class _MapPageState extends State<MapPage> {
       });
       if (currentLocation != null) {
         mapController.move(currentLocation!, 15.0);
+        var bounds = mapController.camera.visibleBounds;
+        var zoom = mapController.camera.zoom;
+        tileManager.prefetchTiles(bounds, zoom.round());
       }
     } catch (e) {
       print("Error getting location: $e");
@@ -59,9 +70,26 @@ class _MapPageState extends State<MapPage> {
           initialCenter: currentLocation ??
               LatLng(20.0, 38.0), // Initial center of the map
           initialZoom: 9.0, // Initial zoom level
+          onMapReady: () {
+            print("map is ready!");
+            if (currentLocation != null) {
+              var bounds = mapController.camera.visibleBounds;
+              var zoom = mapController.camera.zoom;
+              tileManager.prefetchTiles(bounds, zoom.round());
+            }
+          },
+          onPositionChanged: (MapPosition position, bool hasGesture) {
+            if (hasGesture) {
+              // triggered when the map is panned or zoomed by the user
+              var bounds = mapController.camera.visibleBounds;
+              var zoom = mapController.camera.zoom;
+              tileManager.prefetchTiles(bounds, zoom.round());
+            }
+          },
         ), // MapOptions
         children: [
           TileLayer(
+            tileProvider: localTileProvider,
             urlTemplate:
                 'https://api.mapbox.com/styles/v1/yorhaether/clrnqwwd9006g01peerp97p8m/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoieW9yaGFldGhlciIsImEiOiJjbHJ4ZjI4ajQwdXZ6Mmp0a3pzZmlxaTloIn0.yiGEwb2lvrqZRFB1QixSYw',
             additionalOptions: const {
