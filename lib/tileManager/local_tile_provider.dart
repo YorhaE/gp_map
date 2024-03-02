@@ -1,43 +1,43 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:test_location/tileManager/TileProviderModel.dart';
 import 'package:test_location/tileManager/store_tiles.dart';
 
-//!!!!!!!!!!
-// do not modify or change anything of this file, I'm not done with it yet.
-// -Ether
-//!!!!!!!!!!
 class LocalTileProvider extends TileProvider {
   final TileManager _tileManager;
-  final _cache = <String, ImageProvider>{};
+  final TileProviderModel _tileProviderModel;
   final String urlTemplate;
+  final Map<String, ImageProvider> _cache = {};
+  LocalTileProvider(
+      this._tileManager, this.urlTemplate, this._tileProviderModel);
 
-  LocalTileProvider(this._tileManager, this.urlTemplate);
+  @override
+  ImageProvider getImage(TileCoordinates coords, TileLayer options) {
+    String key = "${coords.z}_${coords.x}_${coords.y}";
 
-  ImageProvider getImage(TileCoordinates coordinates, TileLayer options) {
-    // this is a key for cach map
-    String key = "${coordinates.z}_${coordinates.x}_${coordinates.y}";
-
-    // this is for trying to get the image from cach
-    if (_cache.containsKey(key)) {
-      return _cache[key]!;
-    } else {
-      // return a network image while the tile is loading:
-      return NetworkImage(
-        options.urlTemplate!
-            .replaceAll("{z}", coordinates.z.toString())
-            .replaceAll("{x}", coordinates.x.toString())
-            .replaceAll("{y}", coordinates.y.toString()),
-      );
-    }
+    // Attempt to return a cached image if available
+    Future<File?> tileFileFuture =
+        _tileManager.getTileFile(coords.x, coords.y, coords.z);
+    tileFileFuture.then((file) {
+      if (file != null) {
+        _cache[key] = FileImage(file);
+        _tileProviderModel.notifyMapRefresh(); // notify to refresh the map.
+      }
+    });
+    return _cache[key] ??
+        _getPlaceholderImage(); // return cached image when availabe or transparrent image if not.
   }
 
-  void prefetchTile(int x, int y, int z) async {
-    String key = "${z}_${x}_${y}";
-    // checking if the tile exists locally:
-    if (!await _tileManager.tileExists(x, y, z)) {
-      await _tileManager.downloadTile(x, y, z);
-    }
-    var file = await _tileManager.getTileFile(x, y, z);
-    _cache[key] = FileImage(file);
+  // Returns a placeholder or transparent image
+  ImageProvider _getPlaceholderImage() {
+    return MemoryImage(kTransparentImage);
   }
+
+  // this decodes a transparrent image to be returned
+  static final Uint8List kTransparentImage = Base64Decoder().convert(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wQAnQEB/wl8UmgAAAAASUVORK5CYII=');
 }
